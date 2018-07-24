@@ -280,7 +280,7 @@ namespace raytracer
 		float x, y, z;
 	};
 
-	 Vec3 operator*(float f, const Vec3& v)
+    inline Vec3 operator*(float f, const Vec3& v)
 	{
 		return Vec3(f * v.x, f * v.y, f * v.z);
 	}

@@ -21,177 +21,177 @@ namespace raytracer
 
 
     template <class T>
-    T RTMax(T a, T b)
+    inline T RTMax(T a, T b)
     {
         return a < b ? b : a;
     }
 
     //! overload for float to use fsel on xbox
     template <>
-    float RTMax(float a, float b)
+    inline float RTMax(float a, float b)
     {
         return std::max(a, b);
     }
 
     template <class T>
-    T RTMin(T a, T b)
+    inline T RTMin(T a, T b)
     {
         return a < b ? a : b;
     }
 
     template <>
-    float RTMin(float a, float b)
+    inline float RTMin(float a, float b)
     {
         return std::min(a, b);
     }
 
-    float RTAbs(float a)
+    inline float RTAbs(float a)
     {
         return std::abs(a);
     }
 
-    bool RTEquals(float a, float b, float eps)
+    inline bool RTEquals(float a, float b, float eps)
     {
         return (RTAbs(a - b) < eps);
     }
 
-    double RTAbs(double a)
+    inline double RTAbs(double a)
     {
         return ::fabs(a);
     }
 
-    int32_t RTAbs(int32_t a)
+    inline int32_t RTAbs(int32_t a)
     {
         return ::abs(a);
     }
 
     template <class T>
-    T RTClamp(T v, T lo, T hi)
+    inline T RTClamp(T v, T lo, T hi)
     {
         return RTMin(hi, RTMax(lo, v));
     }
 
-    float RTSqrt(float a)
+    inline float RTSqrt(float a)
     {
         return ::sqrt(a);
     }
 
-    double RTSqrt(double a)
+    inline double RTSqrt(double a)
     {
         return ::sqrt(a);
     }
 
-    float RTRecipSqrt(float a)
+    inline float RTRecipSqrt(float a)
     {
         return 1 / ::sqrt(a);
     }
 
-    double RTRecipSqrt(double a)
+    inline double RTRecipSqrt(double a)
     {
         return 1 / ::sqrt(a);
     }
 
-    float RTSin(float a)
+    inline float RTSin(float a)
     {
         return ::sin(a);
     }
 
-    double RTSin(double a)
+    inline double RTSin(double a)
     {
         return ::sin(a);
     }
 
-    float RTCos(float a)
+    inline float RTCos(float a)
     {
         return ::cos(a);
     }
 
-    double RTCos(double a)
+    inline double RTCos(double a)
     {
         return ::cos(a);
     }
 
-    float RTTan(float a)
+    inline float RTTan(float a)
     {
         return ::tanf(a);
     }
 
-    double RTTan(double a)
+    inline double RTTan(double a)
     {
         return ::tan(a);
     }
 
-    float RTAsin(float f)
+    inline float RTAsin(float f)
     {
         return ::asinf(RTClamp(f, -1.0f, 1.0f));
     }
 
-    double RTAsin(double f)
+    inline double RTAsin(double f)
     {
         return ::asin(RTClamp(f, -1.0, 1.0));
     }
 
-    float RTAcos(float f)
+    inline float RTAcos(float f)
     {
         return ::acosf(RTClamp(f, -1.0f, 1.0f));
     }
 
-    double RTAcos(double f)
+    inline double RTAcos(double f)
     {
         return ::acos(RTClamp(f, -1.0, 1.0));
     }
 
-    float RTAtan(float a)
+    inline float RTAtan(float a)
     {
         return ::atanf(a);
     }
 
-    double RTAtan(double a)
+    inline double RTAtan(double a)
     {
         return ::atan(a);
     }
 
-    float RTAtan2(float x, float y)
+    inline float RTAtan2(float x, float y)
     {
         return ::atan2f(x, y);
     }
 
-    double RTAtan2(double x, double y)
+    inline double RTAtan2(double x, double y)
     {
         return ::atan2(x, y);
     }
 
-    bool RTIsFinite(float f)
+    inline bool RTIsFinite(float f)
     {
         return ::isfinite(f);
     }
 
-    bool RTIsFinite(double f)
+    inline bool RTIsFinite(double f)
     {
         return ::isfinite(f);
     }
 
-    float RTFloor(float a)
+    inline float RTFloor(float a)
     {
         return ::floorf(a);
     }
 
-    float RTExp(float a)
+    inline float RTExp(float a)
     {
         return ::expf(a);
     }
 
-    float RTCeil(float a)
+    inline float RTCeil(float a)
     {
         return ::ceilf(a);
     }
 
-    float RTPow(float x, float y)
+    inline float RTPow(float x, float y)
     {
         return ::powf(x, y);
     }
 
-    float RTLog(float x)
+    inline float RTLog(float x)
     {
         return ::logf(x);
     }

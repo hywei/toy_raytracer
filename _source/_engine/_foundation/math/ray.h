@@ -20,6 +20,13 @@ namespace raytracer
         Vec3 dir{ Vec3(0.f, 0.f, 1.f) };
     };
 
+    class HitInfo
+    {
+    public:
+        float frac{ -1.f };
+        Vec3 pos{ Vec3(0.f, 0.f, 0.f) };
+        Vec3 norm{ Vec3(0.f, 0.f, 1.f) };
+    };
 }
 
 #endif
