@@ -7,6 +7,8 @@
 
 namespace raytracer
 {    
+    class Material;
+
     class RTShape
     {
     public:
@@ -17,9 +19,14 @@ namespace raytracer
         Geometry* getGeometry() const { return geometry_; }
 
         Vec3 getPosition() const { return pos_; }
+
+        void setMaterial(const Material* m) { material_ = m; }
+        const Material* getMaterial() const { return material_; }
+
     protected:
         Geometry* geometry_{ nullptr };
         Vec3 pos_{ Vec3(0.f, 0.f, 0.f) };
+        const Material* material_{ nullptr };
     };
 }
 

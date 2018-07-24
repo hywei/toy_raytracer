@@ -6,21 +6,37 @@
 #include "_foundation/math/intersect.h"
 #include "_foundation/math/utils.h"
 #include "_render/camera.h"
+#include "_render/material.h"
 #include "_render/scene.h"
 
 using namespace raytracer;
 
 
-Vec3 color(const Ray& r, const Scene& scene)
+Vec3 color(const Ray& r, const Scene& scene, int  depth)
 {
 
     HitInfo hit;
     if (scene.raycast(r, hit))
     {
-        Vec3 target = hit.pos + hit.norm + randomPointInSphere(1.f);
-        const Ray new_ray(hit.pos, (target - hit.pos).getNormalized());
-        //return 0.5 * Vec3(hit.norm.x + 1.f, hit.norm.y + 1.f, hit.norm.z + 1.f);
-        return 0.5f * color(new_ray, scene);
+        if (hit.material)
+        {
+            Ray scattered_ray;
+            Vec3 attenuation;
+
+            if (depth < 100 &&
+                hit.material->scatter(r, hit, attenuation, scattered_ray))
+            {
+                return attenuation.multiply(color(scattered_ray, scene, depth + 1));
+            }
+            else
+            {
+                return Vec3(0.f, 0.f, 0.f);
+            }
+        }
+        else 
+        {
+            return Vec3(0.f, 0.f, 0.f);
+        }
     }
     else
     {
@@ -31,14 +47,23 @@ Vec3 color(const Ray& r, const Scene& scene)
 
 int main()
 {
-    std::ofstream fout("res7_1.ppm");
+    std::ofstream fout("res8.ppm");
     int nx = 200, ny = 100, ns = 100;
     fout << "P3\n" << nx << " " << ny << "\n255\n";
 
     Scene scene;
-    scene.addSphere(Vec3(0.f, 0.f, -1.f), 0.5f);
-    scene.addSphere(Vec3(0.f, -100.5f, -1.f), 100.f);
-    //scene.addPlane(Vec3(0.f, 1.f, 0.f), -2.f);
+
+    const Material* mat1 = scene.addLambertianMaterial(Vec3(0.8f, 0.3f, 0.3f));
+    const Material* mat2 = scene.addLambertianMaterial(Vec3(0.8f, 0.8f, 0.0f));
+    const Material* mat3 = scene.addMetalMaterial(Vec3(0.8f, 0.6f, 0.2f));
+    const Material* mat4 = scene.addMetalMaterial(Vec3(0.8f, 0.8f, 0.8f));
+    const Material* mat5 = scene.addLambertianMaterial(Vec3(0.f, 0.18f, 0.4f));
+
+    scene.addSphere(Vec3(0.f, 0.f, -1.f), 0.5f, mat1);
+    scene.addSphere(Vec3(0.f, -100.5f, -1.f), 100.f, mat2);
+    scene.addSphere(Vec3(1.f, 0.f, -1.f), 0.3f, mat3);
+    scene.addSphere(Vec3(-1.f, 0.f, -1.f), 0.3f, mat4);
+    scene.addPlane(Vec3(0.f, 0.f, 1.f), -2.f, mat5);
 
     const Vec3 lower_left_corner(-2.f, -1.f, -1.f);
     const Vec3 horizontal(4.f, 0.f, 0.f);
@@ -63,7 +88,7 @@ int main()
                     (static_cast<float>(j) + dis(gen)) / static_cast<float> (ny);
 
                 const Ray& ray = camera.getRay(u, v);
-                col += color(ray, scene);
+                col += color(ray, scene, 0);
             }
 
 

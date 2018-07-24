@@ -5,6 +5,8 @@
 
 namespace raytracer
 {
+    class Material;
+
     class Ray
     {
     public:
@@ -26,6 +28,7 @@ namespace raytracer
         float frac{ -1.f };
         Vec3 pos{ Vec3(0.f, 0.f, 0.f) };
         Vec3 norm{ Vec3(0.f, 0.f, 1.f) };
+        const Material* material{ nullptr };
     };
 }
 

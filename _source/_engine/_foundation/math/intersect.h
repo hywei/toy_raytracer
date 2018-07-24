@@ -89,6 +89,8 @@ namespace raytracer
                 break;
             }
 
+            out_hit.material = shape.getMaterial();
+
             return hit;
         }
     }

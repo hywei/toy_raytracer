@@ -7,7 +7,7 @@
 
 namespace raytracer
 {
-    Vec3 randomPointInSphere(const float radius)
+    inline Vec3 randomPointInSphere(const float radius)
     {
         Vec3 p;
 
