@@ -26,6 +26,7 @@ namespace raytracer
 
         const Material* addLambertianMaterial(const Vec3& albedo);
         const Material* addMetalMaterial(const Vec3& albedo);
+        const Material* addDielectricMaterial(const float ref_idx);
 
     protected:
         std::vector<RTShape*> shapes_;

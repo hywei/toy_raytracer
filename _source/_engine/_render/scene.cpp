@@ -59,6 +59,13 @@ namespace raytracer
         return material;
     }
 
+    const Material* Scene::addDielectricMaterial(const float ref_idx)
+    {
+        DielectricMaterial* material = new DielectricMaterial(ref_idx);
+        materials_.emplace_back(static_cast<Material*>(material));
+        return material;
+    }
+
     bool Scene::raycast(const Ray& ray, HitInfo& out_hit) const
     {
         out_hit.frac = std::numeric_limits<float>::max();
