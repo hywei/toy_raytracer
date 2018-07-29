@@ -89,8 +89,8 @@ namespace raytracer
                     float t2 = (box_max[i] - ray.start[i]) * odd;
                     if (t1 > t2) std::swap(t1, t2);
                     if (t1 > tmin) tmin = t1;
-                    if (t2 > tmax) tmax = t2;
-                    if (tmin > tmax) return false;
+                    if (t2 < tmax) tmax = t2;
+                    if (tmin > tmax || tmax < 0) return false;
                 }
             }
 
@@ -135,6 +135,8 @@ namespace raytracer
             default:
                 break;
             }
+
+            if (hit && RTAbs(out_hit.frac) < 1e-6f) return false;
 
             out_hit.material = shape.getMaterial();
 

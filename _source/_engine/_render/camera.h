@@ -15,9 +15,26 @@ namespace raytracer
         Vec3 vertical_{ Vec3(0.f, 2.f, 0.f) };
 
     public:
-        Camera(const Vec3& ori, const Vec3& ll_corner, const Vec3& h, const Vec3& v):
-            origin_(ori), lower_left_corner_(ll_corner), horizontal_(h), vertical_(v)
-        {}
+        Camera(Vec3 lookfrom, Vec3 lookat, Vec3 vup, float vfov, float aspect)
+        {
+            const float theta = vfov * RTPi / 180.f;
+            const float half_height = RTTan(theta / 2.f);
+            const float half_width = aspect * half_height;
+            
+            origin_ = lookfrom;
+            
+            const Vec3 w = (lookfrom - lookat).getNormalized();
+            const Vec3 u = vup.cross(w).getNormalized();
+            const Vec3 v = w.cross(u);
+
+            lower_left_corner_ = origin_ - half_width*u - half_height * v - (lookfrom - lookat);
+            lower_left_corner_ = origin_ - half_width*u - half_height * v - w;
+            //lower_left_corner_.z = 0.5;
+
+            horizontal_ = 2.f * half_width * u;
+            vertical_ = 2 * half_height * v;
+        }
+
 
         Ray getRay(const float u, const float v)
         {

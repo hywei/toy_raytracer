@@ -17,6 +17,8 @@ using namespace raytracer;
 #define PBSTR "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
 #define PBWIDTH 60
 
+#define MAXDEPTH 50
+
 void printProgress(float percentage)
 {
     int val = (int)(percentage * 100);
@@ -37,7 +39,7 @@ Vec3 color(const Ray& r, const Scene& scene, int  depth)
             Ray scattered_ray;
             Vec3 attenuation;
 
-            if (depth < 50 &&
+            if (depth < MAXDEPTH &&
                 hit.material->scatter(r, hit, attenuation, scattered_ray))
             {
                 return attenuation.multiply(color(scattered_ray, scene, depth + 1));
@@ -61,8 +63,8 @@ Vec3 color(const Ray& r, const Scene& scene, int  depth)
 
 int main()
 {
-    std::ofstream fout("res9_1.ppm");
-    int nx = 4096, ny = 2160, ns = 1024;
+    std::ofstream fout("res10_4.ppm");
+    int nx = 1920, ny = 1080, ns = 1024;
     fout << "P3\n" << nx << " " << ny << "\n255\n";
 
     Scene scene;
@@ -71,23 +73,27 @@ int main()
     const Material* mat2 = scene.addLambertianMaterial(Vec3(0.8f, 0.8f, 0.0f));
     const Material* mat3 = scene.addMetalMaterial(Vec3(0.8f, 0.6f, 0.2f));
     const Material* mat4 = scene.addMetalMaterial(Vec3(0.8f, 0.8f, 0.8f));
-    const Material* mat5 = scene.addLambertianMaterial(Vec3(0.f, 0.18f, 0.4f));
+    const Material* mat5 = scene.addLambertianMaterial(Vec3(0.f, 0.5f, 0.25f));
     const Material* mat6 = scene.addDielectricMaterial(1.5f);
+    const Material* mat7 = scene.addLambertianMaterial(Vec3(0.8f, 0.3f, 0.3f));
+    const Material* mat8 = scene.addLambertianMaterial(Vec3(0.f, 0.25f, 0.5f));
 
     scene.addSphere(Vec3(0.f, 0.f, -1.f), 0.5f, mat1);
     scene.addSphere(Vec3(0.f, -100.5f, -1.f), 100.f, mat2);
-    scene.addSphere(Vec3(1.f, 0.f, -1.f), 0.3f, mat3);
-    //scene.addBox(Vec3(0.f, 0.f, -1.f), Vec3(0.5f, 1.5f, 0.5f), mat1);
+    scene.addSphere(Vec3(1.f, 0.f, -1.f), 0.5f, mat3);
+    scene.addBox(Vec3(1.5f, 0.f, 0.f), Vec3(0.2f, 0.5f, 0.2f), mat7);
+    scene.addBox(Vec3(-1.5f, 0.f, 0.f), Vec3(0.2f, 0.5f, 0.2f), mat8);
     scene.addSphere(Vec3(-1.f, 0.f, -1.f), 0.5f, mat6);
-    scene.addSphere(Vec3(-1.f, 0.f, -1.f), -0.45f, mat6);
-    scene.addPlane(Vec3(0.f, 0.f, 1.f), -2.f, mat5);
+    //scene.addSphere(Vec3(-1.f, 0.f, -1.f), -0.45f, mat6);
+    scene.addPlane(Vec3(0.f, 0.f, 1.f), -5.f, mat5);
 
-    const Vec3 lower_left_corner(-2.f, -1.f, -1.f);
-    const Vec3 horizontal(4.f, 0.f, 0.f);
-    const Vec3 vertical(0.f, 2.109375f, 0.f);
-    const Vec3 origin(0.f, 0.f, 5.f);
-
-    Camera camera(origin, lower_left_corner, horizontal, vertical);
+    const float aspect = static_cast<float>(nx) / static_cast<float>(ny);
+    Camera camera(
+        Vec3(0.f, 0.f, 1.5f),
+        Vec3(0.f, 0.f, -1.f),
+        Vec3(0.f, 1.f, 0.f), 
+        90, 
+        aspect);
 
     std::random_device rd;
     std::mt19937 gen(rd());
